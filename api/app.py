@@ -1,3 +1,5 @@
+
+
 # from fastapi import FastAPI
 # from pydantic import BaseModel
 # import faiss
@@ -36,9 +38,12 @@
 
 #     results = []
 #     for idx, dist in zip(indices[0], distances[0]):
-#         item = metadata[idx]
-#         item["score"] = float(dist)
-#         results.append(item)
+#         meta = metadata[idx]
+#         results.append({
+#             "title": meta["title"],
+#             "url": meta["url"],
+#             "score": float(dist)
+#         })
 
 #     return {
 #         "query": request.query,
@@ -67,18 +72,26 @@ print("Loading metadata...")
 with open(METADATA_PATH, "rb") as f:
     metadata = pickle.load(f)
 
+# FastAPI app
 app = FastAPI(title="SHL Assessment Recommendation API")
 
+# Request schema
 class RecommendationRequest(BaseModel):
     query: str
     top_k: int = 5
 
+# Health check endpoint (nice-to-have)
+@app.get("/")
+def health():
+    return {"status": "API is running"}
+
+# Recommendation endpoint
 @app.post("/recommend")
 def recommend_assessments(request: RecommendationRequest):
     # Encode query
     query_embedding = model.encode([request.query]).astype("float32")
 
-    # Search FAISS
+    # Search FAISS index
     distances, indices = index.search(query_embedding, request.top_k)
 
     results = []
@@ -89,6 +102,9 @@ def recommend_assessments(request: RecommendationRequest):
             "url": meta["url"],
             "score": float(dist)
         })
+
+    # Sort results by relevance (lower score = better match)
+    results = sorted(results, key=lambda x: x["score"])
 
     return {
         "query": request.query,
