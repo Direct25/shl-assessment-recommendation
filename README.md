@@ -102,7 +102,7 @@ shl-assessment-recommendation/
 │
 ├── requirements.txt          # Python dependencies
 └── README.md                 # Project documentation
-
+```
 
 
 ## 🚀 How to Run the Project
@@ -142,7 +142,7 @@ UI: http://localhost:8501
 ![Swagger API](docs/screenshots/api_swagger_recommend.jpeg)
 ![Swagger API](docs/screenshots/api_swagger_response.jpeg)
 
-##🔌 API Example
+## 🔌 API Example
 
 Endpoint: POST /recommend
 
@@ -167,7 +167,7 @@ Response:
   ]
 }
 
-##🧪 Validation & Testing
+## 🧪 Validation & Testing
 
 The recommendation system was validated using multiple realistic hiring scenarios
 (e.g., software engineering, content writing, sales, and administrative roles).
@@ -186,7 +186,7 @@ Swagger UI (/docs)
 
 Streamlit frontend with varied queries and recommendation sizes
 
-##📊 Evaluation Methodology (Planned)
+## 📊 Evaluation Methodology (Planned)
 
 The recommended evaluation metric for this task is Mean Recall@K, using the provided labeled training dataset.
 
@@ -199,7 +199,7 @@ Supporting batch evaluation
 
 Returning ranked recommendations suitable for Recall@K analysis
 
-##⚠️ Known Limitations & Assumptions
+## ⚠️ Known Limitations & Assumptions
 
 The current catalog is a subset of SHL assessments used to validate correctness and architecture.
 
@@ -209,7 +209,7 @@ Recommendation balancing across multiple assessment categories is handled implic
 
 These trade-offs were made to prioritize robust system design, clarity, and correctness.
 
-##✅ Key Strengths
+## ✅ Key Strengths
 
 Clean, modular architecture
 
@@ -223,7 +223,7 @@ Clear separation of concerns
 
 Transparent assumptions and limitations
 
-##🔮 Future Improvements
+## 🔮 Future Improvements
 
 Full SHL catalog ingestion (377+ assessments)
 
@@ -235,7 +235,7 @@ Caching and performance optimization
 
 Deployment using Docker / cloud services
 
-##📌 Conclusion
+## 📌 Conclusion
 
 This project demonstrates a production-ready foundation for an AI-driven assessment recommendation system.
 The focus was on sound engineering principles, explainability, and extensibility, with clear paths for further enhancement.
