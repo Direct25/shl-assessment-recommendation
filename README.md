@@ -1,80 +1,105 @@
-SHL Assessment Recommendation Engine
+# 🧠 SHL Assessment Recommendation Engine
 
-An AI-powered recommendation system that suggests relevant SHL assessments based on natural language hiring requirements, using semantic embeddings and vector similarity search.
+An end-to-end semantic recommendation system that suggests relevant SHL assessments
+based on natural language hiring requirements.
 
-This project was built as part of the SHL AI Intern – Generative AI Assignment and demonstrates an end-to-end recommender pipeline including data preparation, embeddings, similarity search, API serving, and a simple frontend UI.
+The system leverages sentence embeddings and vector similarity search to match
+job descriptions with suitable SHL assessments in a scalable and interpretable way.
 
-📌 Problem Statement
+---
 
-Hiring managers often describe role requirements in free-form natural language (e.g., “Hiring Java developers with strong communication skills”).
-The goal of this system is to map such descriptions to the most relevant SHL assessments in an automated, scalable, and explainable way.
+## 🚀 Features
 
-🏗️ System Architecture
-SHL Assessment Catalog (CSV)
-        ↓
-Text Cleaning & Preparation
-        ↓
-Sentence Embeddings (MiniLM)
-        ↓
-FAISS Vector Index
-        ↓
-FastAPI Recommendation Service
-        ↓
-Streamlit Web UI
+- Semantic search using sentence embeddings (MiniLM)
+- Efficient similarity search using FAISS
+- RESTful API built with FastAPI
+- Interactive Streamlit web interface
+- Human-readable recommendations (title + URL)
+- Health check endpoint for API monitoring
 
-🧠 Technical Approach
-🔹 Text Representation
+---
 
-Each SHL assessment is represented using its title (instead of only URLs) to improve semantic understanding.
+## 🏗️ System Architecture
+User Query
+↓
+Sentence Embedding (MiniLM)
+↓
+FAISS Vector Search
+↓
+Top-K Relevant Assessments
+↓
+FastAPI Response
+↓
+Streamlit UI
+
+
+---
+
+## 🔧 Technical Approach
+
+### Text Representation
+Each SHL assessment is represented using its **title** (instead of only URLs) to
+improve semantic understanding and recommendation quality.
 
 Embeddings are generated using:
 
 sentence-transformers/all-MiniLM-L6-v2
 
-🔹 Vector Search
 
-FAISS is used for efficient similarity search over embedding vectors.
+---
 
-Lower cosine distance indicates higher relevance.
+### Vector Search
+- FAISS is used for fast similarity search over embedding vectors
+- Lower cosine distance indicates higher relevance
+- Results are sorted by relevance score for better interpretability
 
-🔹 Recommendation Logic
+---
 
-User query is embedded and compared against all assessment embeddings.
+### Recommendation Logic
+1. User provides a natural language hiring requirement
+2. Query is converted into an embedding
+3. FAISS searches for nearest assessment embeddings
+4. Top-K most relevant assessments are returned
 
-Top-K most similar assessments are returned.
+---
 
-Results are sorted by relevance score for better interpretability.
+## 📂 Project Structure
 
-📂 Project Structure
 shl-assessment-recommendation/
 │
-├── api/                # FastAPI backend
-│   └── app.py
+├── api/ # FastAPI backend
+│ └── app.py
 │
 ├── data/
-│   ├── raw/             # SHL catalog CSV
-│   ├── processed/
-│   └── evaluation/
+│ ├── raw/ # Original SHL catalog CSV
+│ ├── processed/ # Cleaned data
+│ └── evaluation/ # Validation datasets
 │
-├── embeddings/          # FAISS index & embedding scripts
-│   ├── build_embeddings.py
-│   ├── shl_faiss.index
-│   └── shl_metadata.pkl
+├── embeddings/ # FAISS index & metadata
+│ ├── build_embeddings.py
+│ ├── shl_faiss.index
+│ └── shl_metadata.pkl
 │
-├── frontend/            # Streamlit UI
-│   └── app.py
+├── frontend/ # Streamlit UI
+│ └── app.py
 │
-├── scraping/            # Dataset conversion utilities
+├── scraping/ # Dataset conversion utilities
 │
 ├── requirements.txt
 └── README.md
 
-🚀 How to Run the Project
-1️⃣ Install Dependencies
+
+---
+
+## ▶️ How to Run the Project
+
+### 1️⃣ Install Dependencies
+```bash
 pip install -r requirements.txt
 
 2️⃣ Build Embeddings
 python embeddings/build_embeddings.py
+
 
 3️⃣ Start the API
 python -m uvicorn api.app:app --reload
