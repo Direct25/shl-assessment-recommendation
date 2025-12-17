@@ -20,18 +20,29 @@ job descriptions with suitable SHL assessments in a scalable and interpretable w
 ---
 
 ## 🏗️ System Architecture
-User Query
-↓
-Sentence Embedding (MiniLM)
-↓
-FAISS Vector Search
-↓
-Top-K Relevant Assessments
-↓
-FastAPI Response
-↓
-Streamlit UI
 
+The recommendation system follows a clear, modular pipeline:
+
+1. **User Query Input**  
+   Hiring requirements are provided in natural language (e.g., role description).
+
+2. **Sentence Embedding (MiniLM)**  
+   The query is converted into a dense semantic vector using a pretrained
+   sentence transformer model.
+
+3. **FAISS Vector Search**  
+   The query embedding is compared against precomputed assessment embeddings
+   using cosine similarity.
+
+4. **Top-K Retrieval**  
+   The most semantically relevant SHL assessments are selected and ranked.
+
+5. **FastAPI Response Layer**  
+   Results are returned as a structured JSON response with titles, URLs, and
+   relevance scores.
+
+6. **Streamlit User Interface**  
+   Recommendations are displayed in a clean, interactive web interface.
 
 ---
 
@@ -44,7 +55,6 @@ improve semantic understanding and recommendation quality.
 Embeddings are generated using:
 
 sentence-transformers/all-MiniLM-L6-v2
-
 
 ---
 
@@ -63,43 +73,44 @@ sentence-transformers/all-MiniLM-L6-v2
 
 ---
 
-## 📂 Project Structure
+## 📁 Project Structure
 
+```text
 shl-assessment-recommendation/
 │
-├── api/ # FastAPI backend
-│ └── app.py
+├── api/
+│   └── app.py                # FastAPI backend (recommendation API)
 │
 ├── data/
-│ ├── raw/ # Original SHL catalog CSV
-│ ├── processed/ # Cleaned data
-│ └── evaluation/ # Validation datasets
+│   ├── raw/
+│   │   └── shl_catalog_raw.csv    # Original SHL assessment catalog
+│   ├── processed/                 # Cleaned / transformed data
+│   └── evaluation/
+│       └── Gen_AI_Dataset.xlsx    # Validation dataset
 │
-├── embeddings/ # FAISS index & metadata
-│ ├── build_embeddings.py
-│ ├── shl_faiss.index
-│ └── shl_metadata.pkl
+├── embeddings/
+│   ├── build_embeddings.py    # Embedding generation script
+│   ├── shl_faiss.index        # FAISS vector index
+│   └── shl_metadata.pkl       # Assessment metadata
 │
-├── frontend/ # Streamlit UI
-│ └── app.py
+├── frontend/
+│   └── app.py                # Streamlit web UI
 │
-├── scraping/ # Dataset conversion utilities
+├── scraping/
+│   ├── convert_excel_to_catalog.py  # Dataset conversion utility
+│   └── scrape_shl_catalog.py         # (Optional) scraper
 │
-├── requirements.txt
-└── README.md
+├── requirements.txt          # Python dependencies
+└── README.md                 # Project documentation
 
 
----
 
-## ▶️ How to Run the Project
-
-### 1️⃣ Install Dependencies
-```bash
+## 🚀 How to Run the Project
+1️⃣ Install Dependencies
 pip install -r requirements.txt
 
 2️⃣ Build Embeddings
 python embeddings/build_embeddings.py
-
 
 3️⃣ Start the API
 python -m uvicorn api.app:app --reload
@@ -131,7 +142,7 @@ UI: http://localhost:8501
 ![Swagger API](docs/screenshots/api_swagger_recommend.jpeg)
 ![Swagger API](docs/screenshots/api_swagger_response.jpeg)
 
-🔌 API Example
+##🔌 API Example
 
 Endpoint: POST /recommend
 
@@ -156,7 +167,7 @@ Response:
   ]
 }
 
-🧪 Validation & Testing
+##🧪 Validation & Testing
 
 The recommendation system was validated using multiple realistic hiring scenarios
 (e.g., software engineering, content writing, sales, and administrative roles).
@@ -175,7 +186,7 @@ Swagger UI (/docs)
 
 Streamlit frontend with varied queries and recommendation sizes
 
-📊 Evaluation Methodology (Planned)
+##📊 Evaluation Methodology (Planned)
 
 The recommended evaluation metric for this task is Mean Recall@K, using the provided labeled training dataset.
 
@@ -188,7 +199,7 @@ Supporting batch evaluation
 
 Returning ranked recommendations suitable for Recall@K analysis
 
-⚠️ Known Limitations & Assumptions
+##⚠️ Known Limitations & Assumptions
 
 The current catalog is a subset of SHL assessments used to validate correctness and architecture.
 
@@ -198,7 +209,7 @@ Recommendation balancing across multiple assessment categories is handled implic
 
 These trade-offs were made to prioritize robust system design, clarity, and correctness.
 
-✅ Key Strengths
+##✅ Key Strengths
 
 Clean, modular architecture
 
@@ -212,7 +223,7 @@ Clear separation of concerns
 
 Transparent assumptions and limitations
 
-🔮 Future Improvements
+##🔮 Future Improvements
 
 Full SHL catalog ingestion (377+ assessments)
 
@@ -224,7 +235,7 @@ Caching and performance optimization
 
 Deployment using Docker / cloud services
 
-📌 Conclusion
+##📌 Conclusion
 
 This project demonstrates a production-ready foundation for an AI-driven assessment recommendation system.
 The focus was on sound engineering principles, explainability, and extensibility, with clear paths for further enhancement.
