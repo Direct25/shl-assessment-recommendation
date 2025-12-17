@@ -43,7 +43,7 @@ def scrape_catalog():
             })
 
             print("Scraped:", name)
-            time.sleep(0.3)  # be polite to server
+            time.sleep(0.3) 
 
         except Exception as e:
             print("Error scraping", url, "->", e)
