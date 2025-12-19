@@ -4,17 +4,19 @@ import faiss
 import pickle
 import numpy as np
 from sentence_transformers import SentenceTransformer
+from pathlib import Path
 
 # Paths
-FAISS_INDEX_PATH = "embeddings/shl_faiss.index"
-METADATA_PATH = "embeddings/shl_metadata.pkl"
+BASE_DIR = Path(__file__).resolve().parent.parent
+FAISS_INDEX_PATH = BASE_DIR / "embeddings" / "shl_faiss.index"
+METADATA_PATH = BASE_DIR / "embeddings" / "shl_metadata.pkl"
 
 # Load model and index at startup
 print("Loading embedding model...")
 model = SentenceTransformer("all-MiniLM-L6-v2")
 
 print("Loading FAISS index...")
-index = faiss.read_index(FAISS_INDEX_PATH)
+index = faiss.read_index(str(FAISS_INDEX_PATH))  # ✅ FIX HERE
 
 print("Loading metadata...")
 with open(METADATA_PATH, "rb") as f:
@@ -28,7 +30,7 @@ class RecommendationRequest(BaseModel):
     query: str
     top_k: int = 5
 
-# Health check endpoint 
+# Health check endpoint
 @app.get("/")
 def health():
     return {"status": "API is running"}
@@ -36,10 +38,8 @@ def health():
 # Recommendation endpoint
 @app.post("/recommend")
 def recommend_assessments(request: RecommendationRequest):
-    # Encode query
     query_embedding = model.encode([request.query]).astype("float32")
 
-    # Search FAISS index
     distances, indices = index.search(query_embedding, request.top_k)
 
     results = []
@@ -51,7 +51,6 @@ def recommend_assessments(request: RecommendationRequest):
             "score": float(dist)
         })
 
-    # Sort results by relevance (lower score = better match)
     results = sorted(results, key=lambda x: x["score"])
 
     return {
